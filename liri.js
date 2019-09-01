@@ -70,8 +70,8 @@ function spotifyThis() {
         .then(function (response) {
             var thisSong = response.tracks.items[0];
             console.log(thisSong.name + " by " + thisSong.artists[0].name + 
-            " from their album " + thisSong.album.name + "\n" +
-            "\nLink: " + thisSong.preview_url);
+                " from their album " + thisSong.album.name + "\n" +
+                "\nLink: " + thisSong.preview_url);
         })
         .catch(function (err) {
             console.log(err);
@@ -79,13 +79,26 @@ function spotifyThis() {
 }
 
 function movie() {
+    if ( userSpecfied === "" ){
+        userSpecfied = "Mr Nobody";
+        console.log("can't pick?...\n")
+    }
+
     console.log("Loading movie data for '" + userSpecfied + ".'\n");
 
     var url = "http://www.omdbapi.com/?apikey=trilogy&t=" + userSpecfied;
 
     axios.get(url)
         .then(function (response) {
-            console.log(response.data);
+            var thisMovie = response.data;
+            console.log(thisMovie.Title + "\n" +
+                "\nYear: " + thisMovie.Year + "\n" + 
+                "IMDB: " + thisMovie.Ratings[0].Value + "\n" + 
+                "RottenTomato: " + thisMovie.Ratings[1].Value + "\n\n" + 
+                thisMovie.Country + "\n" + 
+                thisMovie.Language + "\n" + 
+                "\nCast: " + thisMovie.Actors + "\n" + 
+                "\nPlot: " + thisMovie.Plot);
         })
 
         .catch(function(error){
