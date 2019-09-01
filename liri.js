@@ -55,6 +55,10 @@ function concert() {
 }
 
 function spotifyThis() {
+    if ( userSpecfied === "" ){
+        userSpecfied = "The Sign by Ace of Base";
+        console.log("#rickrolled...\n")
+    }
     console.log("Loading song data for '" + userSpecfied + "'\n");
 
     spotify
@@ -72,11 +76,21 @@ function spotifyThis() {
         .catch(function (err) {
             console.log(err);
         });
-
 }
 
 function movie() {
+    console.log("Loading movie data for '" + userSpecfied + ".'\n");
 
+    var url = "http://www.omdbapi.com/?apikey=trilogy&t=" + userSpecfied;
+
+    axios.get(url)
+        .then(function (response) {
+            console.log(response.data);
+        })
+
+        .catch(function(error){
+            console.log(error);
+        });
 }
 
 function doThis() {
