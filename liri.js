@@ -2,6 +2,7 @@ require("dotenv").config();
 var axios = require('axios');
 var moment = require('moment');
 var keys = require("./keys.js");
+var fs = require('fs');
 var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
 
@@ -15,25 +16,29 @@ for (var i = 3; i < cliAmount; i++) {
 }
 userSpecfied = userSpecfied.slice(0, -1);
 
-//define user specified commands
-switch (command) {
-    case "concert-this":
-        concert();
-        break;
-    case "spotify-this-song":
-        spotifyThis();
-        break;
-    case "movie-this":
-        movie();
-        break;
-    case "do-what-it-says":
-        doThis();
-        break;
-    case "help":
-        help();
-        break;
-    default:
-        console.log("Please type a valid command.  Type help for information.");
+run(command);
+
+function run(command) {
+    //define user specified commands
+    switch (command) {
+        case "concert-this":
+            concert();
+            break;
+        case "spotify-this-song":
+            spotifyThis();
+            break;
+        case "movie-this":
+            movie();
+            break;
+        case "do-what-it-says":
+            doThis();
+            break;
+        case "help":
+            help();
+            break;
+        default:
+            console.log("Please type a valid command.  Type help for information.");
+    }
 }
 
 function concert() {
@@ -55,7 +60,7 @@ function concert() {
 }
 
 function spotifyThis() {
-    if ( userSpecfied === "" ){
+    if (userSpecfied === "") {
         userSpecfied = "The Sign by Ace of Base";
         console.log("#rickrolled...\n")
     }
@@ -69,7 +74,7 @@ function spotifyThis() {
         })
         .then(function (response) {
             var thisSong = response.tracks.items[0];
-            console.log(thisSong.name + " by " + thisSong.artists[0].name + 
+            console.log(thisSong.name + " by " + thisSong.artists[0].name +
                 " from their album " + thisSong.album.name + "\n" +
                 "\nLink: " + thisSong.preview_url);
         })
@@ -79,7 +84,7 @@ function spotifyThis() {
 }
 
 function movie() {
-    if ( userSpecfied === "" ){
+    if (userSpecfied === "") {
         userSpecfied = "Mr Nobody";
         console.log("can't pick?...\n")
     }
@@ -92,24 +97,45 @@ function movie() {
         .then(function (response) {
             var thisMovie = response.data;
             console.log(thisMovie.Title + "\n" +
-                "\nYear: " + thisMovie.Year + "\n" + 
-                "IMDB: " + thisMovie.Ratings[0].Value + "\n" + 
-                "RottenTomato: " + thisMovie.Ratings[1].Value + "\n\n" + 
-                thisMovie.Country + "\n" + 
-                thisMovie.Language + "\n" + 
-                "\nCast: " + thisMovie.Actors + "\n" + 
+                "\nYear: " + thisMovie.Year + "\n" +
+                "IMDB: " + thisMovie.Ratings[0].Value + "\n" +
+                "RottenTomato: " + thisMovie.Ratings[1].Value + "\n\n" +
+                thisMovie.Country + "\n" +
+                thisMovie.Language + "\n" +
+                "\nCast: " + thisMovie.Actors + "\n" +
                 "\nPlot: " + thisMovie.Plot);
         })
 
-        .catch(function(error){
+        .catch(function (error) {
             console.log(error);
         });
 }
 
 function doThis() {
+    fs.readFile("random.txt", "utf8", function (error, data) {
 
+        if (error) {
+            return console.log(error);
+        }
+
+        var cli = data.replace(/,/g, ' ');
+        cli = cli.replace(/"/g, ' ');
+        console.log("Parsing from random.txt: " + cli + "\n\n");
+
+        var dataArr = data.split(",");
+
+        command = dataArr[0];
+        userSpecfied = dataArr[1];
+        run(command);
+
+    });
 }
 
 function help() {
-
+    console.log(
+        "concert-this:  check available concerts\n" +
+        "spotify-this-song:  check info about a single song\n" +
+        "movie-this:  search IMDB info on a single movie\n" +
+        "do-what-it-says:  parse info from random.txt as a cli command"
+    )
 }
