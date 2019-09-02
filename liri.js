@@ -56,6 +56,9 @@ function concert() {
                     thisKey[i].venue.region + "\n" +
                     time.format("MMM Do YY") + "\n");
             }
+        })
+        .catch(function (error) {
+            console.log(error);
         });
 }
 
