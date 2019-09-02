@@ -35,5 +35,5 @@ Read a text file (random.txt) and then execute the text from the file.
 
 
 
-[![liri-still](./liri-still.png)](https://github.com/tylerhipke/node-liri-js/blob/master/liri.mov?raw=true)
+[![liri-still](./liri-still.png)](https://github.com/tylerhipke/node-liri-js/blob/master/liri.mov)
 
